@@ -1,0 +1,76 @@
+# Archivo: k8s/app-services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-transactions
+spec:
+  type: NodePort # Para acceder desde afuera de minikube
+  ports:
+    - port: 8080
+      nodePort: 30001
+  selector:
+    app: transactions
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transactions-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transactions
+  template:
+    metadata:
+      labels:
+        app: transactions
+    spec:
+      containers:
+        - name: transactions
+          image: transactions-service:1.0.0-SNAPSHOT
+          imagePullPolicy: Never # Usaremos la imagen local de Docker
+          env:
+            - name: QUARKUS_DATASOURCE_JDBC_URL
+              value: "jdbc:postgresql://postgres-shared-db:5432/finance_db"
+            - name: QUARKUS_DATASOURCE_USERNAME
+              value: "user"
+            - name: QUARKUS_DATASOURCE_PASSWORD
+              value: "pass"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-analytics
+spec:
+  type: NodePort
+  ports:
+    - port: 8081
+      nodePort: 30002
+  selector:
+    app: analytics
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: analytics
+  template:
+    metadata:
+      labels:
+        app: analytics
+    spec:
+      containers:
+        - name: analytics
+          image: analytics-service:1.0.0-SNAPSHOT
+          imagePullPolicy: Never
+          env:
+            - name: QUARKUS_DATASOURCE_JDBC_URL
+              value: "jdbc:postgresql://postgres-shared-db:5432/finance_db"
+            - name: QUARKUS_DATASOURCE_USERNAME
+              value: "user"
+            - name: QUARKUS_DATASOURCE_PASSWORD
+              value: "pass"
