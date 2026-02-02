@@ -1,2 +1,3 @@
 /home/jcardozo/sodep/quarkus-project/common-modules/src/main/java/com/sodep/App.java
-/home/jcardozo/sodep/quarkus-project/common-modules/src/main/java/com/sodep/model/Transaction.java
+/home/jcardozo/sodep/quarkus-project/common-modules/src/main/java/com/sodep/datasources/TransactionDatasource.java
+/home/jcardozo/sodep/quarkus-project/common-modules/src/main/java/com/sodep/models/Transaction.java

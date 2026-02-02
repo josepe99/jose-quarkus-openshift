@@ -1,2 +1,3 @@
-com/sodep/model/Transaction.class
+com/sodep/datasources/TransactionDatasource.class
 com/sodep/App.class
+com/sodep/models/Transaction.class
