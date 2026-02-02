@@ -62,6 +62,11 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-container-image-docker</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.sodep</groupId>
+            <artifactId>common-modules</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
