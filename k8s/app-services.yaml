@@ -27,8 +27,8 @@ spec:
     spec:
       containers:
         - name: transactions
-          image: transactions-service:1.0.0-SNAPSHOT
-          imagePullPolicy: Never # Usaremos la imagen local de Docker
+          image: jcardozo/service-transactions:1.0.0-SNAPSHOT # Nombre exacto de docker images
+          imagePullPolicy: Never
           env:
             - name: QUARKUS_DATASOURCE_JDBC_URL
               value: "jdbc:postgresql://postgres-shared-db:5432/finance_db"
@@ -65,7 +65,7 @@ spec:
     spec:
       containers:
         - name: analytics
-          image: analytics-service:1.0.0-SNAPSHOT
+          image: jcardozo/service-analytics:1.0.0-SNAPSHOT # Nombre exacto de docker images
           imagePullPolicy: Never
           env:
             - name: QUARKUS_DATASOURCE_JDBC_URL
