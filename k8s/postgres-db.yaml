@@ -25,12 +25,8 @@ spec:
       containers:
         - name: postgres
           image: postgres:15
-          env:
-            - name: POSTGRES_USER
-              value: user
-            - name: POSTGRES_PASSWORD
-              value: pass
-            - name: POSTGRES_DB
-              value: finance_db
+          envFrom:
+            - secretRef:
+                name: postgres-secret
           ports:
             - containerPort: 5432

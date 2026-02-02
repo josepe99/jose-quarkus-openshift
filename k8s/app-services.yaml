@@ -29,13 +29,9 @@ spec:
         - name: transactions
           image: jcardozo/service-transactions:1.0.0-SNAPSHOT # Nombre exacto de docker images
           imagePullPolicy: Never
-          env:
-            - name: QUARKUS_DATASOURCE_JDBC_URL
-              value: "jdbc:postgresql://postgres-shared-db:5432/finance_db"
-            - name: QUARKUS_DATASOURCE_USERNAME
-              value: "user"
-            - name: QUARKUS_DATASOURCE_PASSWORD
-              value: "pass"
+          envFrom:
+            - secretRef:
+                name: postgres-secret
 ---
 apiVersion: v1
 kind: Service
@@ -67,10 +63,6 @@ spec:
         - name: analytics
           image: jcardozo/service-analytics:1.0.0-SNAPSHOT # Nombre exacto de docker images
           imagePullPolicy: Never
-          env:
-            - name: QUARKUS_DATASOURCE_JDBC_URL
-              value: "jdbc:postgresql://postgres-shared-db:5432/finance_db"
-            - name: QUARKUS_DATASOURCE_USERNAME
-              value: "user"
-            - name: QUARKUS_DATASOURCE_PASSWORD
-              value: "pass"
+          envFrom:
+            - secretRef:
+                name: postgres-secret
