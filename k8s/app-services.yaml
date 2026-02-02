@@ -40,7 +40,7 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 8081
+    - port: 8080
       nodePort: 30002
   selector:
     app: analytics
