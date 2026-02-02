@@ -29,6 +29,11 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
+            <groupId>com.sodep</groupId>
+            <artifactId>common-modules</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-orm-panache</artifactId>
         </dependency>
