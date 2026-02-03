@@ -1,0 +1,1 @@
+# jose-quarkus-openshift
