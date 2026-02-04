@@ -1,13 +1,11 @@
-# Archivo: k8s/app-services.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: service-transactions
 spec:
-  type: NodePort # Para acceder desde afuera de minikube
   ports:
     - port: 8080
-      nodePort: 30001
+      targetPort: 8080
   selector:
     app: transactions
 ---
@@ -27,8 +25,8 @@ spec:
     spec:
       containers:
         - name: transactions
-          image: jcardozo/service-transactions:1.0.0-SNAPSHOT # Nombre exacto de docker images
-          imagePullPolicy: Never
+          image: image-registry.openshift-image-registry.svc:5000/jcardozo-playground/service-transactions:latest
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: postgres-secret
@@ -38,10 +36,9 @@ kind: Service
 metadata:
   name: service-analytics
 spec:
-  type: NodePort
   ports:
     - port: 8080
-      nodePort: 30002
+      targetPort: 8080
   selector:
     app: analytics
 ---
@@ -61,8 +58,8 @@ spec:
     spec:
       containers:
         - name: analytics
-          image: jcardozo/service-analytics:1.0.0-SNAPSHOT # Nombre exacto de docker images
-          imagePullPolicy: Never
+          image: image-registry.openshift-image-registry.svc:5000/jcardozo-playground/service-analytics:latest
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: postgres-secret

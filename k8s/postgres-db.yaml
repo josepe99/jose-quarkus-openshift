@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:15
+          image: quay.io/sclorg/postgresql-15-c9s
           envFrom:
             - secretRef:
                 name: postgres-secret
