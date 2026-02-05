@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sodep.models.Transaction;
 import com.sodep.services.TransactionService;
+import com.sodep.types.ApiResponse;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -27,14 +28,16 @@ public class TransactionController {
     TransactionService service;
 
     @GET
-    public List<Transaction> getAll() {
-        return service.findAllActive();
+    public ApiResponse<List<Transaction>> getAll() {
+        List<Transaction> transactions = service.findAllActive();
+        return new ApiResponse<>(transactions, "success");
     }
 
     @GET
     @Path("/{id}")
-    public Transaction getOne(@PathParam("id") Long id) {
-        return service.findActiveById(id);
+    public ApiResponse<Transaction> getOne(@PathParam("id") Long id) {
+        Transaction transaction = service.findActiveById(id);
+        return new ApiResponse<>(transaction, "success");
     }
 
     @POST
@@ -45,8 +48,9 @@ public class TransactionController {
 
     @PUT
     @Path("/{id}")
-    public Transaction update(@PathParam("id") Long id, Transaction transaction) {
-        return service.update(id, transaction);
+    public ApiResponse<Transaction> update(@PathParam("id") Long id, Transaction transaction) {
+        Transaction updated = service.update(id, transaction);
+        return new ApiResponse<>(updated, "success");
     }
 
     @DELETE
