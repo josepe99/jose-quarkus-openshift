@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transactions-dep
+spec:
+  template:
+    spec:
+      containers:
+        - name: transactions
+          image: image-registry.openshift-image-registry.svc:5000/jcardozo-playground/service-transactions:1.0.0
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-dep
+spec:
+  template:
+    spec:
+      containers:
+        - name: analytics
+          image: image-registry.openshift-image-registry.svc:5000/jcardozo-playground/service-analytics:1.0.0

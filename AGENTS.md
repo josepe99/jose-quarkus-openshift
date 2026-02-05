@@ -37,8 +37,7 @@ docker build -t jcardozo/service-transactions-dev:dev -f service-transactions/sr
 docker build -t jcardozo/service-analytics-dev:dev -f service-analytics/src/main/docker/Dockerfile.dev .
 
 # Apply manifests
-kubectl apply -f k8s/postgres-db.yaml
-kubectl apply -f k8s/app-services.dev.yaml
+kubectl apply -k k8s/overlays/dev
 
 # Access services
 minikube service service-transactions --url

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transactions-dep
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: build-common-modules
+          image: jcardozo/service-transactions-dev:dev
+          imagePullPolicy: Never
+          workingDir: /workspace
+          command: ["bash", "-lc"]
+          args: ["mvn -pl common-modules -am install -DskipTests -f /workspace/pom.xml"]
+          volumeMounts:
+            - name: transactions-src
+              mountPath: /workspace
+            - name: m2-cache
+              mountPath: /root/.m2
+      containers:
+        - name: transactions
+          image: jcardozo/service-transactions-dev:dev
+          imagePullPolicy: Never
+          workingDir: /workspace/service-transactions
+          command: ["mvn"]
+          args: ["quarkus:dev", "-Dquarkus.http.host=0.0.0.0"]
+          env:
+            - name: QUARKUS_FLYWAY_BASELINE_ON_MIGRATE
+              value: "true"
+          volumeMounts:
+            - name: transactions-src
+              mountPath: /workspace
+            - name: m2-cache
+              mountPath: /root/.m2
+      volumes:
+        - name: transactions-src
+          hostPath:
+            path: /mnt/host
+            type: Directory
+        - name: m2-cache
+          emptyDir: {}

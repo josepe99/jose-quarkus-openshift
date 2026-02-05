@@ -1,4 +1,4 @@
-# Archivo: k8s/postgres-db.yaml
+# Archivo: k8s/overlays/dev/postgres-db.yaml
 apiVersion: v1
 kind: Service
 metadata:

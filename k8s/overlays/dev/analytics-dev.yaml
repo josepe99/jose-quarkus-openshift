@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-dep
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: build-common-modules
+          image: jcardozo/service-analytics-dev:dev
+          imagePullPolicy: Never
+          workingDir: /workspace
+          command: ["bash", "-lc"]
+          args: ["mvn -pl common-modules -am install -DskipTests -f /workspace/pom.xml"]
+          volumeMounts:
+            - name: analytics-src
+              mountPath: /workspace
+            - name: m2-cache
+              mountPath: /root/.m2
+      containers:
+        - name: analytics
+          image: jcardozo/service-analytics-dev:dev
+          imagePullPolicy: Never
+          workingDir: /workspace/service-analytics
+          command: ["mvn"]
+          args: ["quarkus:dev", "-Dquarkus.http.host=0.0.0.0"]
+          volumeMounts:
+            - name: analytics-src
+              mountPath: /workspace
+            - name: m2-cache
+              mountPath: /root/.m2
+      volumes:
+        - name: analytics-src
+          hostPath:
+            path: /mnt/host
+            type: Directory
+        - name: m2-cache
+          emptyDir: {}

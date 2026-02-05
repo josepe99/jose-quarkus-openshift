@@ -25,8 +25,9 @@ spec:
     spec:
       containers:
         - name: transactions
-          image: image-registry.openshift-image-registry.svc:5000/jcardozo-playground/service-transactions:latest
-          imagePullPolicy: Always
+          image: service-transactions:latest
+          ports:
+            - containerPort: 8080
           envFrom:
             - secretRef:
                 name: postgres-secret
@@ -58,8 +59,9 @@ spec:
     spec:
       containers:
         - name: analytics
-          image: image-registry.openshift-image-registry.svc:5000/jcardozo-playground/service-analytics:latest
-          imagePullPolicy: Always
+          image: service-analytics:latest
+          ports:
+            - containerPort: 8080
           envFrom:
             - secretRef:
                 name: postgres-secret
