@@ -1,4 +1,4 @@
-/workspace/common-modules/src/main/java/com/sodep/App.java
-/workspace/common-modules/src/main/java/com/sodep/datasources/TransactionDatasource.java
-/workspace/common-modules/src/main/java/com/sodep/models/Transaction.java
-/workspace/common-modules/src/main/java/com/sodep/types/ApiResponse.java
+/home/jcardozo/sodep/quarkus-project/common-modules/src/main/java/com/sodep/App.java
+/home/jcardozo/sodep/quarkus-project/common-modules/src/main/java/com/sodep/datasources/TransactionDatasource.java
+/home/jcardozo/sodep/quarkus-project/common-modules/src/main/java/com/sodep/models/Transaction.java
+/home/jcardozo/sodep/quarkus-project/common-modules/src/main/java/com/sodep/types/ApiResponse.java

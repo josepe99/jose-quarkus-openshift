@@ -59,3 +59,39 @@ Notes
 
 Dev mode is driven by mvn quarkus:dev inside the pods, and the source is mounted from your host via /mnt/host.
 If you prefer your global ~/.m2, I can update the dev overlay volume mounts to point to it and adjust the mount strategy.
+
+
+# Run in production
+
+```sh
+export NS=jcardozo-playground
+oc project $NS
+
+# 1) Build + start OpenShift binary builds (JVM images)
+mvn -pl service-transactions -am package -DskipTests
+cd service-transactions
+cp src/main/docker/Dockerfile.jvm ./Dockerfile
+oc -n $NS new-build --binary --name=service-transactions --strategy=docker || true
+oc -n $NS start-build service-transactions --from-dir=. --follow
+rm Dockerfile
+cd ..
+
+mvn -pl service-analytics -am package -DskipTests
+cd service-analytics
+cp src/main/docker/Dockerfile.jvm ./Dockerfile
+oc -n $NS new-build --binary --name=service-analytics --strategy=docker || true
+oc -n $NS start-build service-analytics --from-dir=. --follow
+rm Dockerfile
+cd ..
+# 2) Make sure prod overlay points to the built ImageStream tags
+# (default binary build outputs :latest)
+sed -i 's|service-transactions:.*|service-transactions:latest|g' k8s/overlays/prod/images.yaml
+sed -i 's|service-analytics:.*|service-analytics:latest|g' k8s/overlays/prod/images.yaml
+
+# 3) Apply prod overlay (includes secretGenerator from k8s/overlays/prod/.env)
+oc -n $NS apply -k k8s/overlays/prod
+
+# 4) Wait for rollout
+oc -n $NS rollout status deploy/transactions-dep
+oc -n $NS rollout status deploy/analytics-dep
+```

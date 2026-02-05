@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
         - name: transactions
-          image: image-registry.openshift-image-registry.svc:5000/jcardozo-playground/service-transactions:1.0.0
+          image: image-registry.openshift-image-registry.svc:5000/jcardozo-playground/service-transactions:latest
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -18,4 +18,4 @@ spec:
     spec:
       containers:
         - name: analytics
-          image: image-registry.openshift-image-registry.svc:5000/jcardozo-playground/service-analytics:1.0.0
+          image: image-registry.openshift-image-registry.svc:5000/jcardozo-playground/service-analytics:latest

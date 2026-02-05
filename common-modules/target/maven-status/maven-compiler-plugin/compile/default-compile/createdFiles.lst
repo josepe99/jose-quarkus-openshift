@@ -1,3 +1,4 @@
 com/sodep/datasources/TransactionDatasource.class
 com/sodep/App.class
 com/sodep/models/Transaction.class
+com/sodep/types/ApiResponse.class
