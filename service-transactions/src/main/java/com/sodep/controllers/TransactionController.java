@@ -43,7 +43,8 @@ public class TransactionController {
     @POST
     public Response save(Transaction transaction) {
         Transaction created = service.create(transaction);
-        return Response.status(Response.Status.CREATED).entity(created).build();
+        ApiResponse<Transaction> response = new ApiResponse<>(created, "success");
+        return Response.status(Response.Status.CREATED).entity(response).build();
     }
 
     @PUT
