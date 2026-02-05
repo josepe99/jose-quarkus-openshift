@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-bank-config
+data: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-bank
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: bank
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank
+  template:
+    metadata:
+      labels:
+        app: bank
+    spec:
+      containers:
+        - name: bank
+          image: service-bank:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: service-bank-config

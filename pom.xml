@@ -1,31 +1,28 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.sodep</groupId>
-    <artifactId>quarkus-parent</artifactId>
-    <version>1.0.0</version>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>common-modules</module>
-        <module>service-transactions</module>
-        <module>service-analytics</module>
-    </modules>
-
-    <properties>
-        <quarkus.platform.version>3.2.0.Final</quarkus.platform.version>
-        <maven.compiler.release>17</maven.compiler.release>
-    </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.quarkus.platform</groupId>
-                <artifactId>quarkus-bom</artifactId>
-                <version>${quarkus.platform.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sodep</groupId>
+  <artifactId>quarkus-parent</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>common-modules</module>
+    <module>service-transactions</module>
+    <module>service-analytics</module>
+    <module>service-bank</module>
+  </modules>
+  <properties>
+    <quarkus.platform.version>3.2.0.Final</quarkus.platform.version>
+    <maven.compiler.release>17</maven.compiler.release>
+  </properties>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.quarkus.platform</groupId>
+        <artifactId>quarkus-bom</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>
