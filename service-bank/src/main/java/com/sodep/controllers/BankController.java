@@ -19,8 +19,7 @@ public class BankController {
 
     @GET
     @Path("/common/centros-servicios")
-    public Response getCentrosServicios(
-            @QueryParam("nombreODireccion") @DefaultValue("Microcentro") String nombreODireccion) {
+    public Response getCentrosServicios(@QueryParam("nombreODireccion") String nombreODireccion) {
         return bankDatasource.fetchCentrosServicios(nombreODireccion);
     }
 

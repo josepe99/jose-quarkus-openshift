@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-dep
+spec:
+  template:
+    spec:
+      containers:
+        - name: bank
+          image: jcardozo/service-bank-dev:dev
+          imagePullPolicy: Never
+          workingDir: /workspace/service-bank
+          command: ["mvn"]
+          args: ["quarkus:dev", "-Dquarkus.http.host=0.0.0.0"]
+          volumeMounts:
+            - name: bank-src
+              mountPath: /workspace
+            - name: m2-cache
+              mountPath: /root/.m2
+      volumes:
+        - name: bank-src
+          hostPath:
+            path: /mnt/host
+            type: Directory
+        - name: m2-cache
+          emptyDir: {}

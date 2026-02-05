@@ -9,6 +9,7 @@ patches:
   - path: services-nodeport.yaml
   - path: transactions-dev.yaml
   - path: analytics-dev.yaml
+  - path: bank-dev.yaml
 
 secretGenerator:
   - name: postgres-secret
