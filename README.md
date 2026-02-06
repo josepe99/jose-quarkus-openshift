@@ -48,6 +48,19 @@ kubectl logs -f deploy/analytics-dep
 kubectl logs -f deploy/bank-dep
 ```
 
+Set the JWT in secret
+```sh
+kubectl -n default create secret generic bank-secret \
+  --from-literal=JWT_TOKEN='TOKEN-HERE' \
+  -o yaml --dry-run=client | kubectl apply -f -
+kubectl apply -k k8s/overlays/dev
+kubectl -n default rollout restart deployment bank-dep
+# Verify the token in the pod
+kubectl -n default get secret bank-secret
+```
+
+
+
 Access the services.
 
 ```sh

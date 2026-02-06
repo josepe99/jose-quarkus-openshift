@@ -37,3 +37,5 @@ spec:
           envFrom:
             - configMapRef:
                 name: service-bank-config
+            - secretRef:
+                name: bank-secret

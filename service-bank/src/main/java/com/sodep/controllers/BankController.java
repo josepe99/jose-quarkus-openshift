@@ -3,8 +3,8 @@ package com.sodep.controllers;
 import com.sodep.datasources.BankDatasource;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
@@ -25,8 +25,8 @@ public class BankController {
 
     @GET
     @Path("/secure/common/parametros")
-    public Response getParametrosSipap(
-            @QueryParam("dominio") @DefaultValue("motivos-sipap") String dominio) {
-        return bankDatasource.fetchParametrosSipap(dominio);
+    public Response getParametrosSipap(@QueryParam("dominio") String dominio,
+                                       @HeaderParam("Authorization") String authorization) {
+        return bankDatasource.fetchParametrosSipap(dominio, authorization);
     }
 }
