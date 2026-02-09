@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - bank-route.yaml
 
 patches:
   - path: replicas.yaml

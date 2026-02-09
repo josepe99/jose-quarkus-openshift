@@ -1,19 +1,4 @@
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: service-bank-config
-data:
-  MIDDLEWARE_URL: ""
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: bank-secret
-type: Opaque
-stringData:
-  JWT_TOKEN: ""
----
-apiVersion: v1
 kind: Service
 metadata:
   name: service-bank
@@ -48,3 +33,14 @@ spec:
                 name: service-bank-config
             - secretRef:
                 name: bank-secret
+          env:
+            - name: JWT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: bank-secret
+                  key: JWT_TOKEN
+            - name: MIDDLEWARE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: service-bank-config
+                  key: MIDDLEWARE_URL

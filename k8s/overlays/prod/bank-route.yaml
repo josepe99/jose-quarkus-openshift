@@ -1,0 +1,10 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: service-bank
+spec:
+  to:
+    kind: Service
+    name: service-bank
+  port:
+    targetPort: 8080

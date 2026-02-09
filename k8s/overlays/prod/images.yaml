@@ -19,3 +19,14 @@ spec:
       containers:
         - name: analytics
           image: image-registry.openshift-image-registry.svc:5000/jcardozo-playground/service-analytics:latest
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-dep
+spec:
+  template:
+    spec:
+      containers:
+        - name: bank
+          image: image-registry.openshift-image-registry.svc:5000/jcardozo-playground/service-bank:latest

@@ -92,6 +92,17 @@ Endpoints:
 
 
 # Run in production
+First create the secret and configMap
+```sh
+oc -n jcardozo-playground create secret generic bank-secret \
+  --from-literal=JWT_TOKEN='TOKEN-HERE' \
+  -o yaml --dry-run=client | oc apply -f -
+
+oc -n jcardozo-playground create configmap service-bank-config \
+  --from-literal=MIDDLEWARE_URL=http://10.1.0.83:809 \
+  -o yaml --dry-run=client | oc apply -f -
+```
+
 
 ```sh
 export NS=jcardozo-playground
