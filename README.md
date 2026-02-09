@@ -113,11 +113,21 @@ oc -n $NS new-build --binary --name=service-analytics --strategy=docker || true
 oc -n $NS start-build service-analytics --from-dir=. --follow
 rm Dockerfile
 cd ..
+
+mvn -pl service-bank -am package -DskipTests
+cd service-bank
+cp src/main/docker/Dockerfile.jvm ./Dockerfile
+oc -n $NS new-build --binary --name=service-bank --strategy=docker || true
+oc -n $NS start-build service-bank --from-dir=. --follow
+rm Dockerfile
+cd ..
+
 # service-bank: add Dockerfile.jvm and repeat the steps above if/when it has a container build.
 # 2) Make sure prod overlay points to the built ImageStream tags
 # (default binary build outputs :latest)
 sed -i 's|service-transactions:.*|service-transactions:latest|g' k8s/overlays/prod/images.yaml
 sed -i 's|service-analytics:.*|service-analytics:latest|g' k8s/overlays/prod/images.yaml
+sed -i 's|service-bank:.*|service-bank:latest|g' k8s/overlays/prod/images.yaml
 # Add service-bank image override to k8s/overlays/prod/images.yaml when available.
 
 # 3) Apply prod overlay (includes secretGenerator from k8s/overlays/prod/.env)
