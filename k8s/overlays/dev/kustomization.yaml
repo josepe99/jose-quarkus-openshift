@@ -4,7 +4,6 @@ kind: Kustomization
 resources:
   - ../../base
   - postgres-db.yaml
-  - bank-route.yaml
 
 patches:
   - path: services-nodeport.yaml

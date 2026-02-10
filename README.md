@@ -50,16 +50,25 @@ kubectl logs -f deploy/bank-dep
 
 Set the JWT in secret
 ```sh
-kubectl -n default create secret generic bank-secret \
-  --from-literal=JWT_TOKEN='TOKEN-HERE' \
+kubectl create secret generic bank-secret \
+  --from-literal=JWT_TOKEN='WORKING_TOKEN' \
   -o yaml --dry-run=client | kubectl apply -f -
+
+kubectl create configmap service-bank-config \
+  --from-literal=MIDDLEWARE_URL=http://10.1.0.83:8092 \
+  -o yaml --dry-run=client | oc apply -f -
+
 kubectl apply -k k8s/overlays/dev
-kubectl -n default rollout restart deployment bank-dep
+kubectl rollout restart deployment bank-dep
+
 # Verify the token in the pod
-kubectl -n default get secret bank-secret
+kubectl get secret bank-secret
 ```
 
-
+Show service url
+```sh
+minikube service service-bank --url
+```
 
 Access the services.
 
@@ -99,7 +108,7 @@ oc -n jcardozo-playground create secret generic bank-secret \
   -o yaml --dry-run=client | oc apply -f -
 
 oc -n jcardozo-playground create configmap service-bank-config \
-  --from-literal=MIDDLEWARE_URL=http://10.1.0.83:809 \
+  --from-literal=MIDDLEWARE_URL=http://10.1.0.83:8092 \
   -o yaml --dry-run=client | oc apply -f -
 ```
 
