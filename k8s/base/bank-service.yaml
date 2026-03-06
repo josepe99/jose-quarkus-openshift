@@ -28,6 +28,13 @@ spec:
           image: service-bank:latest
           ports:
             - containerPort: 8080
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
           envFrom:
             - configMapRef:
                 name: service-bank-config
