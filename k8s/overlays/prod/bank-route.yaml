@@ -1,6 +1,28 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
+  name: service-transactions
+spec:
+  to:
+    kind: Service
+    name: service-transactions
+  port:
+    targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: service-analytics
+spec:
+  to:
+    kind: Service
+    name: service-analytics
+  port:
+    targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
   name: service-bank
 spec:
   to:
