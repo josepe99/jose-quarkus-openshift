@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
   - bank-route.yaml
+  - postgres-db.yaml
 
 patches:
   - path: replicas.yaml

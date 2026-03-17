@@ -1,5 +1,18 @@
 # Run in dev
 
+## Resource limits
+
+Each application deployment is configured with the following hardware limits to avoid exhausting cluster resources:
+
+- Requests:
+  - CPU: `250m`
+  - Memory: `256Mi`
+- Limits:
+  - CPU: `500m`
+  - Memory: `512Mi`
+
+If you create or edit the Deployments manually from the Kubernetes or OpenShift console, keep these same values for every application Pod.
+
 ## Start minikube and make sure kubectl points to it.
 
 ```sh
@@ -101,7 +114,21 @@ Endpoints:
 
 
 # Run in production
-First create the secret and configMap
+## Configure production DB env
+
+Ensure `k8s/overlays/prod/.env` contains the production database credentials. The prod overlay uses a Kustomize `secretGenerator` to create `postgres-secret` from this file, and now also deploys an internal Postgres service named `postgres-shared-db`.
+
+Use `k8s/overlays/prod/.env.example` as a template. The minimum required values are:
+
+```sh
+POSTGRES_HOST=postgres-shared-db
+POSTGRES_PORT=5432
+POSTGRES_DB=<POSTGRES_DB>
+POSTGRES_USER=<POSTGRES_USER>
+POSTGRES_PASSWORD=<POSTGRES_PASSWORD>
+```
+
+## Create bank secret and configMap
 ```sh
 oc -n jcardozo-playground create secret generic bank-secret \
   --from-literal=JWT_TOKEN='TOKEN-HERE' \
@@ -150,10 +177,11 @@ sed -i 's|service-analytics:.*|service-analytics:latest|g' k8s/overlays/prod/ima
 sed -i 's|service-bank:.*|service-bank:latest|g' k8s/overlays/prod/images.yaml
 # Add service-bank image override to k8s/overlays/prod/images.yaml when available.
 
-# 3) Apply prod overlay (includes secretGenerator from k8s/overlays/prod/.env)
+# 3) Apply prod overlay (includes Postgres, app services, route, and secretGenerator from k8s/overlays/prod/.env)
 oc -n $NS apply -k k8s/overlays/prod
 
 # 4) Wait for rollout
+oc -n $NS rollout status deploy/postgres
 oc -n $NS rollout status deploy/transactions-dep
 oc -n $NS rollout status deploy/analytics-dep
 oc -n $NS rollout status deploy/bank-dep
