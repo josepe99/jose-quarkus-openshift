@@ -9,9 +9,30 @@ spec:
         - name: bank
           image: jcardozo/service-bank-dev:dev
           imagePullPolicy: Never
-          workingDir: /workspace/service-bank
-          command: ["mvn"]
-          args: ["quarkus:dev", "-Dquarkus.http.host=0.0.0.0"]
+          workingDir: /workspace
+          command: ["bash", "-lc"]
+          args:
+            - |
+              set -euo pipefail
+              find_root() {
+                if [ -f /workspace/pom.xml ] && [ -d /workspace/service-bank ]; then
+                  printf '%s\n' /workspace
+                  return 0
+                fi
+                for dir in /workspace/*; do
+                  [ -d "$dir" ] || continue
+                  if [ -f "$dir/pom.xml" ] && [ -d "$dir/service-bank" ]; then
+                    printf '%s\n' "$dir"
+                    return 0
+                  fi
+                done
+                echo "Unable to find bank source under /workspace." >&2
+                ls -la /workspace >&2 || true
+                return 1
+              }
+              ROOT_DIR="$(find_root)"
+              cd "$ROOT_DIR/service-bank"
+              exec mvn quarkus:dev -Dquarkus.http.host=0.0.0.0
           volumeMounts:
             - name: bank-src
               mountPath: /workspace

@@ -11,7 +11,28 @@ spec:
           imagePullPolicy: Never
           workingDir: /workspace
           command: ["bash", "-lc"]
-          args: ["mvn -pl common-modules -am install -DskipTests -f /workspace/pom.xml"]
+          args:
+            - |
+              set -euo pipefail
+              find_root() {
+                if [ -f /workspace/pom.xml ] && [ -d /workspace/common-modules ]; then
+                  printf '%s\n' /workspace
+                  return 0
+                fi
+                for dir in /workspace/*; do
+                  [ -d "$dir" ] || continue
+                  if [ -f "$dir/pom.xml" ] && [ -d "$dir/common-modules" ]; then
+                    printf '%s\n' "$dir"
+                    return 0
+                  fi
+                done
+                echo "Unable to find repo root under /workspace. Expected pom.xml and common-modules/." >&2
+                ls -la /workspace >&2 || true
+                return 1
+              }
+              ROOT_DIR="$(find_root)"
+              cd "$ROOT_DIR"
+              mvn -pl common-modules -am install -DskipTests -f "$ROOT_DIR/pom.xml"
           volumeMounts:
             - name: transactions-src
               mountPath: /workspace
@@ -21,12 +42,42 @@ spec:
         - name: transactions
           image: jcardozo/service-transactions-dev:dev
           imagePullPolicy: Never
-          workingDir: /workspace/service-transactions
-          command: ["mvn"]
-          args: ["quarkus:dev", "-Dquarkus.http.host=0.0.0.0"]
+          workingDir: /workspace
+          command: ["bash", "-lc"]
+          args:
+            - |
+              set -euo pipefail
+              find_root() {
+                if [ -f /workspace/pom.xml ] && [ -d /workspace/service-transactions ]; then
+                  printf '%s\n' /workspace
+                  return 0
+                fi
+                for dir in /workspace/*; do
+                  [ -d "$dir" ] || continue
+                  if [ -f "$dir/pom.xml" ] && [ -d "$dir/service-transactions" ]; then
+                    printf '%s\n' "$dir"
+                    return 0
+                  fi
+                done
+                echo "Unable to find transactions source under /workspace." >&2
+                ls -la /workspace >&2 || true
+                return 1
+              }
+              ROOT_DIR="$(find_root)"
+              cd "$ROOT_DIR/service-transactions"
+              exec mvn quarkus:dev -Dquarkus.http.host=0.0.0.0
           env:
             - name: QUARKUS_FLYWAY_BASELINE_ON_MIGRATE
               value: "true"
+            - name: QUARKUS_ANALYTICS_DISABLED
+              value: "true"
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
           volumeMounts:
             - name: transactions-src
               mountPath: /workspace

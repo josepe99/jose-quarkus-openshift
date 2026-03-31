@@ -2,7 +2,7 @@
 
 ## Resource limits
 
-Each application deployment is configured with the following hardware limits to avoid exhausting cluster resources:
+Base deployments use the following hardware limits to avoid exhausting cluster resources:
 
 - Requests:
   - CPU: `250m`
@@ -12,6 +12,8 @@ Each application deployment is configured with the following hardware limits to 
   - Memory: `512Mi`
 
 If you create or edit the Deployments manually from the Kubernetes or OpenShift console, keep these same values for every application Pod.
+
+In the dev overlay, `transactions` and `analytics` run with a higher memory limit (`1Gi`) because `mvn quarkus:dev` needs more headroom than the packaged runtime image.
 
 ## Start minikube and make sure kubectl points to it.
 
@@ -24,10 +26,16 @@ kubectl config current-context
 
 Ensure `k8s/overlays/dev/.env` contains your dev DB credentials. The dev overlay uses a Kustomize `secretGenerator` to create `postgres-secret` from this file.
 
-Mount the repo into minikube (keep this terminal open).
+Mount the repo into minikube from the repository root and keep this terminal open.
 
 ```sh
-minikube mount ./:/mnt/host
+minikube mount "$(pwd)":/mnt/host
+```
+
+Verify the mount before applying the manifests. `/mnt/host` should contain `pom.xml`, `common-modules/`, and the `service-*` directories.
+
+```sh
+minikube ssh -- 'ls -la /mnt/host'
 ```
 
 Create a local Maven cache directory in the repo (matches your hostPath).
